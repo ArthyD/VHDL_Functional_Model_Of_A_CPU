@@ -46,11 +46,13 @@ package cpu_defs_pack is
 
     constant code_no : opcode_type := 000000;
     constant code_stop : opcode_type := 000001;
+    -- Register instruction --
     constant code_ldc : opcode_type := 100000;
     constant code_ldd : opcode_type := 100001;
     constant code_ldr : opcode_type := 100010;
     constant code_std : opcode_type := 100011;
     constant code_str : opcode_type := 100100;
+    -- Jump instruction --
     constant code_jmp : opcode_type := 110000;
     constant code_jz : opcode_type := 110001;
     constant code_jc : opcode_type := 110010;
@@ -59,4 +61,33 @@ package cpu_defs_pack is
     constant code_jnz : opcode_type := 110101;
     constant code_jnn : opcode_type := 110111;
     constant code_jno : opcode_type := 111000;
+    -- Logic and arithmetic instruction --
+    constant code_not : opcode_type := 000110;
+    constant code_and : opcode_type := 000111;
+    constant code_add : opcode_type := 000010;
+    constant code_addc : opcode_type := 000011;
+
+    constant mnemonic_nop : string( 1 to 3 ) := "nop";
+    constant mnemonic_stop: string( 1 to 4 ) := "stop";
+    -- Register instruction --
+    constant mnemonic_ldc : string( 1 to 3 ) := "ldc";
+    constant mnemonic_ldd : string( 1 to 3 ) := "ldd";
+    constant mnemonic_ldr : string( 1 to 3 ) := "ldr";
+    constant mnemonic_std : string( 1 to 3 ) := "std";
+    constant mnemonic_str : string( 1 to 3 ) := "str";
+    -- Jump instruction --
+    constant mnemonic_jmp : string( 1 to 3 ) := "jmp";
+    constant mnemonic_jz : string( 1 to 2 ) := "jz";
+    constant mnemonic_jc : string( 1 to 2 ) := "jc";
+    constant mnemonic_jn : string( 1 to 2 ) := "jn";
+    constant mnemonic_jo : string( 1 to 2 ) := "jo";
+    constant mnemonic_jnz : string( 1 to 3 ) := "jnz";
+    constant mnemonic_jno : string( 1 to 3 ) := "jno";
+    constant mnemonic_jnn : string( 1 to 3 ) := "jnn";
+    -- Logic and arithmetic instruction --
+    constant mnemonic_not : string( 1 to 3 ) := "not";
+    constant mnemonic_and : string( 1 to 3 ) := "and";
+    constant mnemonic_add : string( 1 to 3 ) := "add";
+    constant mnemonic_addc : string( 1 to 4 ) := "addc";
+
 end cpu_defs_pack;
