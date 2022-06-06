@@ -62,4 +62,12 @@ package cpu_defs_pack is
     constant code_ldr : opcode_type := 100010;
     constant code_std : opcode_type := 100011;
     constant code_str : opcode_type := 100100;
+    constant code_jmp : opcode_type := 110000;
+    constant code_jz : opcode_type := 110001;
+    constant code_jc : opcode_type := 110010;
+    constant code_jn : opcode_type := 110011;
+    constant code_jo : opcode_type := 110100;
+    constant code_jnz : opcode_type := 110101;
+    constant code_jnn : opcode_type := 110111;
+    constant code_jno : opcode_type := 111000;
 end cpu_defs_pack;
