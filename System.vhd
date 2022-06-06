@@ -37,7 +37,7 @@ begin
     use std.textio.all;
 
     -- Declaration of variables --
-    variable Memory: mem_type := init_memory;
+    variable Memory: mem_type := init_memory("Memory.dat");
     variable Reg : reg_type;
     variable INSTR : data_type; -- instruction --
     variable OP : opcode_type; -- opcode --
@@ -46,11 +46,11 @@ begin
     variable Zero, Carry, Negative, Overflow : Boolean := FALSE; --Flags --
 
     -- Files --
-    file TraceFile : Text is out “Trace“;
-    file DumpFile : Text is out “Dump“;
-    file MemoryFile : Text is in “Memory“;
-    file IOInputFile : Text is in “IOInput“;
-    file IOOutputFile: Text is out “IOOutput“;
+    file TraceFile : Text is out "Trace.dat";
+    file DumpFile : Text is out "Dump.dat";
+    file MemoryFile : Text is in "Memory.dat";
+    file IOInputFile : Text is in "IOInput.dat";
+    file IOOutputFile: Text is out "IOOutput.dat";
     variable l : line;
 
     begin
