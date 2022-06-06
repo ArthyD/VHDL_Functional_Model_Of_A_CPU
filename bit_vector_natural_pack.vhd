@@ -19,3 +19,16 @@ use IEEE.NUMERIC_STD.ALL;
 -- any Xilinx leaf cells in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
+
+package bit_vector_natural_pack is
+    function bit_vector2natural(constant A: bit_vector)
+        return data_type;
+    
+    function natural2bit_vector(constant A :data_type,constant data_width : natural)
+        return bit_vector;
+    
+end bit_vector_natural_pack;
+    
+package body bit_vector_natural_pack is
+    
+end bit_vector_natural_pack;

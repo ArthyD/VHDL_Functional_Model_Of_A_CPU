@@ -29,43 +29,43 @@ package cpu_defs_pack is
     constant opcode_width : natural := 6;
 
     subtype data_type is
-        natural range 0 to 2**data_width-1;
+        bit_vector(data_width-1 downto 0);
     
     subtype addr_type is
-        natural range 0 to 2**addr_width-1;
+        bit_vector(addr_width-1 downto 0);
     
     subtype reg_addr_type is
-        natural range 0 to 2**reg_addr_width-1;
+        bit_vector(reg_addr_width-1 downto 0);
     
     subtype opcode_type is
-        natural range 0 to 2**opcode_width-1;
+        bit_vector(opcode_width-1 downto 0);
 
-    type reg_type is array(reg_addr_type) of data_type;
+    type reg_type is array(integer range 0 to 2**reg_addr_width-1) of data_type;
 
-    type mem_type is array(addr_type) of data_type;
+    type mem_type is array(integer range 0 to 2**addr_width-1) of data_type;
 
-    constant code_no : opcode_type := 000000;
-    constant code_stop : opcode_type := 000001;
+    constant code_no : opcode_type := "000000";
+    constant code_stop : opcode_type := "000001";
     -- Register instruction --
-    constant code_ldc : opcode_type := 100000;
-    constant code_ldd : opcode_type := 100001;
-    constant code_ldr : opcode_type := 100010;
-    constant code_std : opcode_type := 100011;
-    constant code_str : opcode_type := 100100;
+    constant code_ldc : opcode_type := "100000";
+    constant code_ldd : opcode_type := "100001";
+    constant code_ldr : opcode_type := "100010";
+    constant code_std : opcode_type := "100011";
+    constant code_str : opcode_type := "100100";
     -- Jump instruction --
-    constant code_jmp : opcode_type := 110000;
-    constant code_jz : opcode_type := 110001;
-    constant code_jc : opcode_type := 110010;
-    constant code_jn : opcode_type := 110011;
-    constant code_jo : opcode_type := 110100;
-    constant code_jnz : opcode_type := 110101;
-    constant code_jnn : opcode_type := 110111;
-    constant code_jno : opcode_type := 111000;
+    constant code_jmp : opcode_type := "110000";
+    constant code_jz : opcode_type := "110001";
+    constant code_jc : opcode_type := "110010";
+    constant code_jn : opcode_type := "110011";
+    constant code_jo : opcode_type := "110100";
+    constant code_jnz : opcode_type := "110101";
+    constant code_jnn : opcode_type := "110111";
+    constant code_jno : opcode_type := "111000";
     -- Logic and arithmetic instruction --
-    constant code_not : opcode_type := 000110;
-    constant code_and : opcode_type := 000111;
-    constant code_add : opcode_type := 000010;
-    constant code_addc : opcode_type := 000011;
+    constant code_not : opcode_type := "000110";
+    constant code_and : opcode_type := "000111";
+    constant code_add : opcode_type := "000010";
+    constant code_addc : opcode_type := "000011";
 
     constant mnemonic_nop : string( 1 to 3 ) := "nop";
     constant mnemonic_stop: string( 1 to 4 ) := "stop";
@@ -89,5 +89,34 @@ package cpu_defs_pack is
     constant mnemonic_and : string( 1 to 3 ) := "and";
     constant mnemonic_add : string( 1 to 3 ) := "add";
     constant mnemonic_addc : string( 1 to 4 ) := "addc";
+
+    -- Function and procedures --
+    function get (
+        constant Memory : in mem_type;
+        constant addr : in addr_type )
+        return data_type;
+    procedure set (
+        variable Memory : inout mem_type;
+        constant addr : in addr_type;
+        constant data : in data_type ); 
+
+end cpu_defs_pack;
+
+
+package body cpu_defs_pack is
+    function get (
+        constant Memory : in mem_type;
+        constant addr : in addr_type ) return data_type is
+        begin
+            return Memory( bit_vector2natural( addr ) );
+    end get;
+
+    procedure set (
+        variable Memory : inout mem_type;
+        constant addr : in addr_type;
+        constant data : in data_type ) is
+        begin
+            Memory( bit_vector2natural( addr ) ) := data;
+    end set;
 
 end cpu_defs_pack;

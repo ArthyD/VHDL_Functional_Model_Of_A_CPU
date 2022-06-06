@@ -20,6 +20,8 @@ use IEEE.NUMERIC_STD.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
+use assignmentCPU.bit_vector_natural_pack.all;
+
 entity System is
 end System;
 
@@ -40,77 +42,107 @@ begin
     variable INSTR : data_type; -- instruction --
     variable OP : opcode_type; -- opcode --
     variable X, Y, Z : reg_addr_type; -- operand --
-    variable PC : addr_type :=0 ; -- Program counter --
+    variable PC : addr_type :=X"000" ; -- Program counter --
     variable Zero, Carry, Negative, Overflow : Boolean := FALSE; --Flags --
 
     -- Files --
     file TraceFile : Text is out “Trace“;
+    file DumpFile : Text is out “Dump“;
+    file MemoryFile : Text is in “Memory“;
+    file IOInputFile : Text is in “IOInput“;
+    file IOOutputFile: Text is out “IOOutput“;
     variable l : line;
 
     begin
         loop 
             -- fetch instruction from memory --
-            Instr := Memory(PC); 
+            Instr := get(Memory(PC)); 
             -- decode instruction --
-            OP := Instr / (2**reg_addr_width)**3;
-            X := (Instr / (2**reg_addr_width)**2) mod 2**reg_addr_width;
-            Y := (Instr / 2**reg_addr_width) mod 2**reg_addr_width;
-            Z := Instr mod 2**reg_addr_width; 
+            OP := Instr(data_width-1 downto data_width-opcode_width);
+            X := Instr(data_width-opcode_width-1 downto data_width-opcode_width-reg_addr_width);
+            Y :=  Instr(data_width-opcode_width-reg_addr_width-1 downto data_width-opcode_width-2*reg_addr_width);
+            Z :=  Instr(data_width-opcode_width-2*reg_addr_width-1 downto data_width-opcode_width-3*reg_addr_width);
+            write_PC_CMD(l, PC, Op, X, Y, Z);
             PC := INC(PC);
             -- compute operation --
             case OP is
                 when code_nop => NULL; -- No Operation
-                when code_stop => WAIT; -- Stop Simulation
+                    write_NoParam( l );
+                when code_stop => dump_memory( Memory, DumpFile );
+                    WAIT; -- Stop Simulation
+                    write_NoParam( l );
+                    write_regs (l, Reg, Zero, Carry, Negative, Overflow);
+                    writeline( TraceFile, l);
+                    print_tail( TraceFile );
 
                 -- REGISTER INSTRUCTION --
-                when code_ldc => Data := Memory(PC); Reg(X) := Data;
+                when code_ldc => write_Param(l,Memory(PC));
+                                    Data := get(Memory(PC)); Reg(X) := Data;
                                     Set_Flags_Load(Data,Zero,Negative,Overflow);
                                     PC := INC(PC);
-                when code_ldd => Data := Memory(Memory(PC)); Reg(X) := Data;
+                when code_ldd =>  write_Param(l,Memory(PC));
+                                Addr:=get(Memory,PC);
+                                Data:= get(Memory,Addr); Reg(X):=Data;
+                                Set_Flags_Load(Data,Zero,Negative,Overflow);
+                                PC:=INC(PC);
+                when code_ldr => write_NoParam( l );
+                                    Data := get(Memory(Reg(Y))); Reg(X) := Data;
                                     Set_Flags_Load(Data,Zero,Negative,Overflow);
-                                    PC := INC(PC);
-                when code_ldr => Data :=Memory(Reg(Y)); Reg(X) := Data;
-                                    Set_Flags_Load(Data,Zero,Negative,Overflow);
-                when code_std => Memory(Memory(PC)):=Reg(X);
-                                    PC := INC(PC);
-                when code_str => Memory(Reg(Y)):=Reg(X);
+                when code_std => write_Param(l,Memory(PC));
+                                Addr:= get(Memory,PC);
+                                set(Memory,Addr,Reg(X));
+                                PC:=INC(PC);
+                when code_str => write_NoParam( l );
+                                set(Memory,Reg(Y),Reg(X));
                 -- END OF REGISTER INSTRUCTION -- 
 
                 -- ARITHMETIC AND LOGICAL INSTRUCTION --
-                when code_not => Data := "NOT" (Reg(Y));
+                when code_not => write_NoParam( l );
+                                Data := "NOT" (Reg(Y));
                                 Reg(X) := Data;
                                 Set_Flags_Logic(Data,Zero,Negative,Overflow);
-                when code_and => Data := Reg(Y) "AND" Reg(Z);
+                when code_and => write_NoParam( l );
+                                Data := Reg(Y) "AND" Reg(Z);
                                 Reg(X) := Data;
                                 Set_Flags_Logic(Data,Zero,Negative,Overflow);
-                when code_add => EXEC_ADDC(Reg(Y), Reg(Z), FALSE, Reg(X), Zero, Carry, Negative, Overflow);
-                when code_addc => EXEC_ADDC(Reg(Y), Reg(Z), Carry, Reg(X), Zero, Carry, Negative, Overflow);
+                when code_add => write_NoParam( l );
+                                EXEC_ADDC(Reg(Y), Reg(Z), FALSE, Reg(X), Zero, Carry, Negative, Overflow);
+                when code_addc => write_NoParam( l );
+                                EXEC_ADDC(Reg(Y), Reg(Z), Carry, Reg(X), Zero, Carry, Negative, Overflow);
                 -- END OF ARITHMETIC AND LOGICAL INSTRUCTION --
 
                 -- JUMP INSTRUCTION --
-                when code_jmp => PC := Memory(PC);
-                when code_jz => if Zero then PC := Memory(PC);
+                when code_jmp => write_Param(l,Memory(PC)); PC := Memory(PC);
+                when code_jz => write_Param(l,Memory(PC));
+                                if Zero = '1' then PC := Memory(PC);
                                 else PC := INC(PC); 
                                 end if;
-                when code_jnz => if not Zero then PC := Memory(PC);
+                when code_jnz => write_Param(l,Memory(PC));
+                                if not Zero = '1' then PC := Memory(PC);
                                 else PC := INC(PC);
                                 end if;
-                when code_jc => if Carry then PC := Memory(PC);
+                when code_jc => write_Param(l,Memory(PC));
+                                if Carry = '1' then PC := Memory(PC);
                                 else PC := INC(PC); 
                                 end if;
-                when code_jnc => if not Carry then PC := Memory(PC);
+                when code_jnc => write_Param(l,Memory(PC));
+                                if not Carry = '1' then PC := Memory(PC);
                                 else PC := INC(PC); 
                                 end if;
-                when code_jn => if Negative then PC := Memory(PC);
+                when code_jn => write_Param(l,Memory(PC));
+                                if Negative ='1' then PC := Memory(PC);
                                 else PC := INC(PC); 
                                 end if;
-                when code_jnn => if not Negative then PC := Memory(PC);
+                when code_jnn => write_Param(l,Memory(PC));
+                                if not Negative = '1' then PC := Memory(PC);
                                 else PC := INC(PC); 
                                 end if;
-                when code_jo => if Overflow then PC := Memory(PC);
+                when code_jo => write_Param(l,Memory(PC));
+                                if Overflow = '1' then PC := Memory(PC);
                                 else PC := INC(PC); 
                                 end if;
-                when code_jno => if not Overflow then PC := Memory(PC);
+                when code_jno => write_Param(l,Memory(PC));
+                                if not Overflow = '1' then PC := Memory(PC);
                                 else PC := INC(PC); 
                                 end if;
                 -- END OF JUMP INSTRUCTION --
@@ -121,5 +153,7 @@ begin
                             severity error;
             
             end case;
+            write_regs (l, Reg, Zero, Carry, Negative, Overflow);
+            writeline( TraceFile, l );
         end loop;
     end process;
