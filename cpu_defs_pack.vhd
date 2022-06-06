@@ -1,21 +1,10 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- TUM VHDL Assignment
+-- Arthur Docquois, Maelys Chevrier, Timothée Carel, Roman Canals
 -- 
--- Create Date: 05/20/2022 03:09:53 PM
--- Design Name: 
--- Module Name: fsm - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
+-- Create Date: 06/06/2022
+-- Project Name: CPU Functional model
+
 ----------------------------------------------------------------------------------
 
 

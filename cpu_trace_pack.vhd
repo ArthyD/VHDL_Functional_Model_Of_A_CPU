@@ -7,7 +7,6 @@
 
 ----------------------------------------------------------------------------------
 
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -19,3 +18,14 @@ use IEEE.NUMERIC_STD.ALL;
 -- any Xilinx leaf cells in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
+
+use assignmentCPU.cpu_defs_pack.all;
+use std.textio.all;
+
+package cpu_trace_pack is
+
+end cpu_trace_pack;
+    
+package body cpu_trace_pack is
+    
+end cpu_trace_pack;

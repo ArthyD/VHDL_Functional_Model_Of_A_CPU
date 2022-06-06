@@ -19,3 +19,16 @@ use IEEE.NUMERIC_STD.ALL;
 -- any Xilinx leaf cells in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
+
+use assignmentCPU.cpu_defs_pack.all;
+    procedure Set_Flags_Load();
+    procedure Set_Flags_Logic();
+
+package flag_handler_pack is
+
+end flag_handler_pack;
+
+package body flag_handler_pack is
+
+end flag_handler_pack;
+
