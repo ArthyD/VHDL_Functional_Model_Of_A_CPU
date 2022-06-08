@@ -56,7 +56,7 @@ begin
     begin
         loop 
             -- fetch instruction from memory --
-            Instr := get(Memory(PC)); 
+            Instr := get(Memory,PC); 
             -- decode instruction --
             OP := Instr(data_width-1 downto data_width-opcode_width);
             X := Instr(data_width-opcode_width-1 downto data_width-opcode_width-reg_addr_width);
@@ -76,24 +76,24 @@ begin
                     print_tail( TraceFile );
 
                 -- REGISTER INSTRUCTION --
-                when code_ldc => write_Param(l,Memory(PC));
-                                    Data := get(Memory(PC)); Reg(X) := Data;
-                                    Set_Flags_Load(Data,Zero,Negative,Overflow);
-                                    PC := INC(PC);
-                when code_ldd =>  write_Param(l,Memory(PC));
+                when code_ldc => write_Param(l,get(Memory,PC));
+                                Data:=get(Memory,PC); Reg(X):=Data;
+                                Set_Flags_Load(Data,Zero,Negative,Overflow);
+                                PC:=INC(PC);
+                when code_ldd => write_Param(l,get(Memory,PC));
                                 Addr:=get(Memory,PC);
-                                Data:= get(Memory,Addr); Reg(X):=Data;
+                                Data:=get(Memory,Addr); Reg(X):=Data;
                                 Set_Flags_Load(Data,Zero,Negative,Overflow);
                                 PC:=INC(PC);
                 when code_ldr => write_NoParam( l );
-                                    Data := get(Memory(Reg(Y))); Reg(X) := Data;
-                                    Set_Flags_Load(Data,Zero,Negative,Overflow);
-                when code_std => write_Param(l,Memory(PC));
-                                Addr:= get(Memory,PC);
+                                Data:=get(Memory,Reg(Y)); Reg(X):=Data;
+                                Set_Flags_Load(Data,Zero,Negative,Overflow);
+                when code_std => write_Param(l,get(Memory,PC));
+                                Addr:=get(Memory,PC);
                                 set(Memory,Addr,Reg(X));
                                 PC:=INC(PC);
                 when code_str => write_NoParam( l );
-                                set(Memory,Reg(Y),Reg(X));
+                                set(Memory,Reg(Y),Reg(X))
                 -- END OF REGISTER INSTRUCTION -- 
 
                 -- ARITHMETIC AND LOGICAL INSTRUCTION --
