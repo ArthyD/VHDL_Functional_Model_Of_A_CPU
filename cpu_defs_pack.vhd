@@ -20,7 +20,10 @@ use IEEE.NUMERIC_STD.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
+
 package cpu_defs_pack is
+    
+    -- DEFINITION OF TYPES --
     constant bus_width : natural := 12;
     constant data_width : natural := bus_width;
     constant addr_width : natural := bus_width;
@@ -44,7 +47,8 @@ package cpu_defs_pack is
 
     type mem_type is array(integer range 0 to 2**addr_width-1) of data_type;
 
-    constant code_no : opcode_type := "000000";
+    -- DEFINITION OF OPCODE --
+    constant code_nop : opcode_type := "000000";
     constant code_stop : opcode_type := "000001";
     -- Register instruction --
     constant code_ldc : opcode_type := "100000";
@@ -67,6 +71,8 @@ package cpu_defs_pack is
     constant code_add : opcode_type := "000010";
     constant code_addc : opcode_type := "000011";
 
+
+    -- DEFINITION OF MNEMONIC CODE FOR TRACE --
     constant mnemonic_nop : string( 1 to 3 ) := "nop";
     constant mnemonic_stop: string( 1 to 4 ) := "stop";
     -- Register instruction --
@@ -90,7 +96,7 @@ package cpu_defs_pack is
     constant mnemonic_add : string( 1 to 3 ) := "add";
     constant mnemonic_addc : string( 1 to 4 ) := "addc";
 
-    -- Function and procedures --
+    -- FUNCTIONS AND PROCEDURES --
     function get (
         constant Memory : in mem_type;
         constant addr : in addr_type )
@@ -108,7 +114,7 @@ package body cpu_defs_pack is
         constant Memory : in mem_type;
         constant addr : in addr_type ) return data_type is
         begin
-            return Memory( bit_vector2natural( addr ) );
+            return Memory(to_integer(unsigned(to_stdlogicvector(addr))));
     end get;
 
     procedure set (
@@ -116,7 +122,7 @@ package body cpu_defs_pack is
         constant addr : in addr_type;
         constant data : in data_type ) is
         begin
-            Memory( bit_vector2natural( addr ) ) := data;
+            Memory(to_integer(unsigned(to_stdlogicvector(addr)))) := data;
     end set;
 
 end cpu_defs_pack;

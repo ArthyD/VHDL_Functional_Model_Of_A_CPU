@@ -19,9 +19,9 @@ use IEEE.NUMERIC_STD.ALL;
 -- any Xilinx leaf cells in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
-
-use assignmentCPU.bit_vector_natural_pack.all;
-use assignmentCPU.cpu_defs_pack.all;
+library work;
+use work.bit_vector_natural_pack.all;
+use work.cpu_defs_pack.all;
 
 package logicArithm_defs_pack is
 
@@ -33,10 +33,10 @@ package logicArithm_defs_pack is
         variable R : out data_type;
         variable Z,CO,N,O : out bit);
 
-    function “NOT“ (constant A :data_type)
+    function "NOT" (constant A :data_type)
         return data_type;
 
-    function “AND“ (constant A, B :data_type)
+    function "AND" (constant A, B :data_type)
         return data_type;
     
 
@@ -51,7 +51,7 @@ package body logicArithm_defs_pack is
         variable C : bit := '1';
         variable R : addr_type;
         begin
-            for i in A reverse_range loop
+            for i in A'reverse_range loop
                 R(i) := A(i) xor C;
                 C := A(i) and C;
             end loop;
@@ -67,7 +67,7 @@ package body logicArithm_defs_pack is
         variable N_TMP : bit;
         variable R_TMP : data_type;
         variable T : integer range 0 to 3;
-        constant zero_v: data_type := (others => ’0’);
+        constant zero_v: data_type := (others => '0');
         begin
             for i in A'reverse_range loop
                 T := bit'pos(A(i))+ bit'pos(B(i))+ bit'pos(C_TMP);
@@ -81,20 +81,20 @@ package body logicArithm_defs_pack is
             O := R_TMP( data_width-1 ) XOR N_TMP;
             N := N_TMP;
             R := R_TMP;
-            Z := bit’val(boolean’pos(R_TMP = zero_v));
+            Z := bit'val(boolean'pos(R_TMP = zero_v));
     end EXEC_ADDC;
 
-    function “NOT“ (constant A : data_type)
+    function "NOT" (constant A : data_type)
         return data_type is
     begin
-        return bit_vector2natural(NOT natural2bit_vector( A , data_width ) );
-    end “NOT“;
+        return NOT A ;
+    end "NOT";
 
-    function “AND“ (constant A,B : data_type)
+    function "AND" (constant A,B : data_type)
         return data_type is
     begin
-        return bit_vector2natural(natural2bit_vector( A , data_width ) AND natural2bit_vector( B , data_width ) );
-    end “AND“;
+        return  A  AND B;
+    end "AND";
 
 
 end logicArithm_defs_pack;
