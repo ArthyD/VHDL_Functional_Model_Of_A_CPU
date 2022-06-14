@@ -153,7 +153,7 @@ begin
                             severity error;
             
             end case;
-            write_regs (l, Reg, Zero, Carry, Negative, Overflow);
+            write_regs(l, Reg, Zero, Carry, Negative, Overflow);
             writeline( TraceFile, l );
         end loop;
     end process;

@@ -30,5 +30,15 @@ package bit_vector_natural_pack is
 end bit_vector_natural_pack;
     
 package body bit_vector_natural_pack is
-    
+    function bit_vector2natural(constant A: bit_vector)
+        return data_type is
+        begin
+            return to_integer(signed(A));
+    end bit_vector2natural;
+
+    function natural2bit_vector(constant A :data_type,constant data_width : natural)
+        return bit_vector is
+        begin
+            return std_logic_vector(to_unsigned(A, data_width));
+    end natural2bit_vector;
 end bit_vector_natural_pack;

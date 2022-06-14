@@ -23,9 +23,9 @@ use IEEE.NUMERIC_STD.ALL;
 package cpu_defs_pack is
     constant bus_width : natural := 12;
     constant data_width : natural := bus_width;
-    constant addre_width : natural := bus_width;
+    constant addr_width : natural := bus_width;
 
-    constant reg_addr-width : natural := 2;
+    constant reg_addr_width : natural := 2;
     constant opcode_width : natural := 6;
 
     subtype data_type is
