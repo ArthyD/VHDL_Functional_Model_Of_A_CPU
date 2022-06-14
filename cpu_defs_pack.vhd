@@ -70,6 +70,9 @@ package cpu_defs_pack is
     constant code_and : opcode_type := "000111";
     constant code_add : opcode_type := "000010";
     constant code_addc : opcode_type := "000011";
+    -- load and store PC instructions --
+    constant code_ldpc : opcode_type := "100111";
+    constant code_stpc : opcode_type := "101000";
 
 
     -- DEFINITION OF MNEMONIC CODE FOR TRACE --
@@ -95,7 +98,10 @@ package cpu_defs_pack is
     constant mnemonic_and : string( 1 to 3 ) := "and";
     constant mnemonic_add : string( 1 to 3 ) := "add";
     constant mnemonic_addc : string( 1 to 4 ) := "addc";
-
+    -- load and store PC instructions --
+    constant mnemonic_ldpc: string( 1 to 4 ) := "ldpc";
+    constant mnemonic_stpc: string( 1 to 4 ) := "stpc";
+    
     -- FUNCTIONS AND PROCEDURES --
     function get (
         constant Memory : in mem_type;

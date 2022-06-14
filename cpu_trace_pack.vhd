@@ -179,6 +179,10 @@ package body cpu_trace_pack is
             when code_and => return mnemonic_and;
             when code_add => return mnemonic_add;
             when code_addc => return mnemonic_addc;
+            -- Load and store with PC --
+            when code_ldpc => return mnemonic_ldpc;
+            when code_stpc => return mnemonic_stpc;
+            
             when others =>
                 assert FALSE
                 report "Illegal command in cmd_image"

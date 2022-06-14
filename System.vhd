@@ -45,8 +45,8 @@ begin
     variable X, Y, Z : reg_addr_type; -- operand --
     variable PC : addr_type :=X"000" ; -- Program counter --
     variable Zero, Carry, Negative, Overflow : bit := '0' ; --Flags --
-    variable DATA : data_type;
-    variable Addr : addr_type;
+    variable DATA : data_type; -- temporary variable to store data --
+    variable Addr : addr_type; -- temporary variable to store address --
 
     -- Files --
     file TraceFile : Text open WRITE_MODE is "Trace.mem";
@@ -150,6 +150,18 @@ begin
                                 else PC := INC(PC); 
                                 end if;
                 -- END OF JUMP INSTRUCTION --
+
+                -- IN OUT INSTRUCTION --
+
+                -- END OF IN OUT INSTRUCTION --
+
+                -- LOAD STORE WITH PC INSTRUCTION --
+                when code_ldpc => write_Param(l,get(Memory,PC));
+                                Reg(bit_vector2natural(X)):=PC;
+                                PC:=INC(PC);
+                when code_stpc => write_Param(l,get(Memory,PC));
+                                PC := X;
+                -- END OF LOAD STORe WITH PC INSTRUCTION --
 
                 when others => -- Illegal or not yet implemented Operations
                             assert FALSE;
