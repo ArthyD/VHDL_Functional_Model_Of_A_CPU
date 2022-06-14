@@ -1,0 +1,31 @@
+What's need to be implemented ?
+
+INSTRUCTIONS
+
+RORC      010011XXYY--      Rotate Y right by one bit through Carry and assign the result to X
+ROR       010010XXYY--      Rotate Y right by one bit and assign the result to X
+ROLC      010001XXYY--      Rotate Y left by one bit through Carry and assign the result to X
+ROL       010000XXYY--      Rotate Y left by one bit and assign the result to X
+SRA       001111XXYY--      Shift Y right by one bit (conserving sign bit) and assign the result to X
+SRL       001110XXYY--      Shift Y right by one bit (not conserving sign bit) and assign the result to X
+SLL       001101XXYY--      Shift Y left by one bit and assign the result to X
+REX       001100XXYY--      Use XOR operator on all bits of Y and assign it to the least significant bit of X
+REO       001011XXYY--      Use OR operator on all bits of Y and assign it to the least significant bit of X
+REA       001010XXYY--      Use AND operator on all bits of Y and assign it to the least significant bit of X
+XOR       001001XXYYZZ      X := Y XOR Z
+OR        001000XXYYZZ      X := Y OR Z
+SUBC      000101XXYYZZ      X := Y – Z – Carry
+SUB       000100XXYYZZ      X := Y – Z
+
+IN        100101XX----      Load X with the value received from Input Device
+OUT       100110XX----      Send X to Output Device
+
+FUNCTIONS
+- dump_memory
+- read input 
+- write output
+
+CONDUCT TESTS
+Write instructions in the memory file with the format CODE XX YY ZZ and check the trace.
+
+Use input and check the output
