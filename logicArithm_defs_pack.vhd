@@ -112,6 +112,29 @@ package body logicArithm_defs_pack is
         return bit_vector2natural(natural2bit_vector( A , data_width ) AND natural2bit_vector( B , data_width ) );
     end “AND“;
 
+    function "XOR" (constant A,B : data_type)
+        return data_type is
+    begin
+        return bit_vector2natural(natural2bit_vector( A , data_width ) XOR natural2bit_vector( B , data_width ) );
+    end "XOR"
+
+    function "OR" (constant A,B : data_type)
+        return data_type is
+    begin
+        return bit_vector2natural(natural2bit_vector( A , data_width ) OR natural2bit_vector( B , data_width ) );
+    end "OR"
+    
+    function "SUBC" (constant A,B : data_type)
+        return data_type is
+    begin
+        return bit_vector2natural(natural2bit_vector( A , data_width ) SUBC natural2bit_vector( B , data_width ) );
+    end "SUBC"
+
+    function "SUB" (constant A,B : data_type)
+        return data_type is
+    begin
+        return bit_vector2natural(natural2bit_vector( A , data_width ) SUB natural2bit_vector( B , data_width ) );
+    end "SUB"
 
 end logicArithm_defs_pack;
 
