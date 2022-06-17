@@ -182,6 +182,9 @@ package body cpu_trace_pack is
             -- Load and store with PC --
             when code_ldpc => return mnemonic_ldpc;
             when code_stpc => return mnemonic_stpc;
+            -- In and Out --
+            when code_in => return mnemonic_in;
+            when code_out => return mnemonic_out;
             
             when others =>
                 assert FALSE

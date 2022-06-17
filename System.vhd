@@ -55,6 +55,8 @@ begin
     file IOInputFile : Text open READ_MODE is "IOInput.mem";
     file IOOutputFile: Text open WRITE_MODE is "IOOutput.mem";
     variable l : line;
+    variable l_IOIn : line;
+    variable l_IOOut : line;
 
     begin
         loop 
@@ -152,7 +154,13 @@ begin
                 -- END OF JUMP INSTRUCTION --
 
                 -- IN OUT INSTRUCTION --
+                when code_in => write_no_param( l );
+                    readline (IOInputFile, l_IOIn);
+                    read (l_IOIn, X);
 
+                when code_out =>  write_no_param( l );
+                    write( l_IOOut , X );
+                    writeline( IOOutputFile , l_IOOut );
                 -- END OF IN OUT INSTRUCTION --
 
                 -- LOAD STORE WITH PC INSTRUCTION --

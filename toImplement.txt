@@ -17,8 +17,6 @@ OR        001000XXYYZZ      X := Y OR Z
 SUBC      000101XXYYZZ      X := Y – Z – Carry
 SUB       000100XXYYZZ      X := Y – Z
 
-IN        100101XX----      Load X with the value received from Input Device
-OUT       100110XX----      Send X to Output Device
 
 FUNCTIONS
 - dump_memory
