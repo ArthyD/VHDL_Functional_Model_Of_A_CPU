@@ -71,6 +71,7 @@ package body cpu_trace_pack is
             write( l , "R3", left, 3);
             write( l , string'(" | ") );
             write( l , "ZCNO", left, 4);
+            -- isn't a writeline(f, l) missing here?
     end print_header;
 
     procedure print_tail( variable f : out text )is
@@ -80,6 +81,7 @@ package body cpu_trace_pack is
             writeline( f , l );
     end print_tail;
 
+    -- isn't a variable f : out text missing here?
     procedure write_PC_CMD (variable l: inout line;
         constant PC: in data_type;
         constant OP: in opcode_type;
@@ -93,21 +95,27 @@ package body cpu_trace_pack is
             write( l , Y, left, 1);
             write( l , Z, left, 1);
             write( l , string'(" | ") );
+            -- isn't a writeline(f, l) missing here?
     end write_PC_CMD;
 
+    -- isn't a variable f : out text missing here?
     procedure write_param (variable l: inout line;
         constant P : in data_type) is
         begin
             write( l, P, left, 3);
             write( l , string'(" | ") );
+            -- isn't a writeline(f, l) missing here?
     end write_param;
 
+    -- isn't a variable f : out text missing here?
     procedure write_no_param (variable l: inout line) is
         begin
             write( l , "---", left, 3);
             write( l , string'(" | ") );
+            -- isn't a writeline(f, l) missing here?
     end write_no_param;
 
+    -- isn't a variable f : out text missing here?
     procedure write_regs (variable l: inout line;
         constant Reg: in reg_type;
         constant Z,CO,N,O : in bit) is
@@ -140,6 +148,7 @@ package body cpu_trace_pack is
             else
                 write( l , "F", left, 1);
             end if;
+            -- isn't a writeline(f, l) missing here?
     end write_regs;
 
     function hex_image( d : data_type )

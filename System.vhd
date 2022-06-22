@@ -82,6 +82,7 @@ begin
                     print_tail( TraceFile );
 
                 -- REGISTER INSTRUCTION --
+                -- sometimes you use write_param, sometimes write_Param. This seems wrong.
                 when code_ldc => write_Param(l,get(Memory,PC));
                                 Data:=get(Memory,PC); Reg(bit_vector2natural(X)):=Data;
                                 Set_Flags_Load(Data,Zero,Negative,Overflow);
