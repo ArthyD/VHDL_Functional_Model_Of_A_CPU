@@ -70,6 +70,15 @@ package cpu_defs_pack is
     constant code_and : opcode_type := "000111";
     constant code_add : opcode_type := "000010";
     constant code_addc : opcode_type := "000011";
+    constant code_subc : opcode_type := "000101";
+    constant code_sub : opcode_type := "000100";
+    constant code_or : opcode_type := "001000";
+    constant code_xor : opcode_type := "001001";
+    constant code_srl : opcode_type := "001110";
+    constant code_sll : opcode_type := "001101";
+    constant code_sra : opcode_type := "001111";
+    constant code_slt : opcode_type := "010011"
+    constant code_sltu : opcode_type := "010010"
     -- load and store PC instructions --
     constant code_ldpc : opcode_type := "100111";
     constant code_stpc : opcode_type := "101000";
@@ -101,6 +110,15 @@ package cpu_defs_pack is
     constant mnemonic_and : string( 1 to 3 ) := "and";
     constant mnemonic_add : string( 1 to 3 ) := "add";
     constant mnemonic_addc : string( 1 to 4 ) := "addc";
+    constant mnemonic_sub : string( 1 to 3 ) := "sub";
+    constant mnemonic_subc : string( 1 to 4 ) := "subc";
+    constant mnemonic_or : string( 1 to 2 ) := "or";
+    constant mnemonic_xor : string( 1 to 3 ) := "xor";
+    constant mnemonic_srl : string( 1 to 3 ) := "srl";
+    constant mnemonic_sll : string( 1 to 3 ) := "sll";
+    constant mnemonic_sra : string( 1 to 3 ) := "sra";
+    constant mnemonic_slt : string( 1 to 3 ) := "slt";
+    constant mnemonic_sltu : string( 1 to 4 ) := "sltu";
     -- load and store PC instructions --
     constant mnemonic_ldpc: string( 1 to 4 ) := "ldpc";
     constant mnemonic_stpc: string( 1 to 4 ) := "stpc";

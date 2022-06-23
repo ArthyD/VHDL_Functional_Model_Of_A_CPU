@@ -188,6 +188,15 @@ package body cpu_trace_pack is
             when code_and => return mnemonic_and;
             when code_add => return mnemonic_add;
             when code_addc => return mnemonic_addc;
+            when code_sub => return mnemonic_sub;
+            when code_subc => return mnemonic_subc;
+            when code_sra => return mnemonic_sra;
+            when code_sll => return mnemonic_sll;
+            when code_srl => return mnemonic_srl;
+            when code_slt => return mnemonic_slt;
+            when code_sltu => return mnemonic_sltu;
+            when code_or => return mnemonic_or;
+            when code_xor => return mnemonic_xor;
             -- Load and store with PC --
             when code_ldpc => return mnemonic_ldpc;
             when code_stpc => return mnemonic_stpc;

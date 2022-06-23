@@ -109,17 +109,42 @@ begin
                                 Reg(bit_vector2natural(X)) := Data;
                                 Set_Flags_Logic(Data,Zero,Negative,Overflow);
                 when code_and => write_no_param( l );
-                                Data := Reg(bit_vector2natural (Y)) AND Reg(bit_vector2natural (Z));
+                                Data := Reg(bit_vector2natural (Y)) "AND" Reg(bit_vector2natural (Z));
+                                Reg(bit_vector2natural (X)) := Data;
+                                Set_Flags_Logic(Data,Zero,Negative,Overflow);
+                when code_or => write_no_param( l );
+                                Data := Reg(bit_vector2natural (Y)) "OR" Reg(bit_vector2natural (Z));
+                                Reg(bit_vector2natural (X)) := Data;
+                                Set_Flags_Logic(Data,Zero,Negative,Overflow);
+                when code_and => write_no_param( l );
+                                Data := Reg(bit_vector2natural (Y)) "XOR" Reg(bit_vector2natural (Z));
                                 Reg(bit_vector2natural (X)) := Data;
                                 Set_Flags_Logic(Data,Zero,Negative,Overflow);
                 when code_add => write_no_param( l );
                                 EXEC_ADDC(Reg(bit_vector2natural(Y)), Reg(bit_vector2natural (Z)), '0', Reg(bit_vector2natural(X)), Zero, Carry, Negative, Overflow);
                 when code_addc => write_no_param( l );
                                 EXEC_ADDC(Reg(bit_vector2natural(Y)), Reg(bit_vector2natural(Z)), Carry, Reg(bit_vector2natural(X)), Zero, Carry, Negative, Overflow);
+                when code_sub => write_no_param( l );
+                                EXEC_SUBC(Reg(bit_vector2natural(Y)), Reg(bit_vector2natural (Z)), '0', Reg(bit_vector2natural(X)), Zero, Carry, Negative, Overflow);
+                when code_subc => write_no_param( l );
+                                EXEC_SUBC(Reg(bit_vector2natural(Y)), Reg(bit_vector2natural(Z)), Carry, Reg(bit_vector2natural(X)), Zero, Carry, Negative, Overflow);
+                when code_srl => write_no_param( l );
+                                Data := "SRL" Reg(bit_vector2natural (Y));
+                                Reg(bit_vector2natural (X)) := Data;
+                                Set_Flags_Logic(Data,Zero,Negative,Overflow);
+                when code_sra => write_no_param( l );
+                                Data := "SRA" Reg(bit_vector2natural (Y));
+                                Reg(bit_vector2natural (X)) := Data;
+                                Set_Flags_Logic(Data,Zero,Negative,Overflow);
+                when code_sll => write_no_param( l );
+                                Data := "SLL" Reg(bit_vector2natural (Y));
+                                Reg(bit_vector2natural (X)) := Data;
+                                Set_Flags_Logic(Data,Zero,Negative,Overflow);
                 -- END OF ARITHMETIC AND LOGICAL INSTRUCTION --
 
                 -- JUMP INSTRUCTION --
-                when code_jmp => write_param(l,Memory(bit_vector2natural(PC))); PC := Memory(bit_vector2natural(PC));
+                when code_jmp => write_param(l,Memory(bit_vector2natural(PC))); 
+                                PC := Memory(bit_vector2natural(PC));
                 when code_jz => write_Param(l,Memory(bit_vector2natural(PC)));
                                 if Zero = '1' then PC := Memory(bit_vector2natural(PC));
                                 else PC := INC(PC); 
