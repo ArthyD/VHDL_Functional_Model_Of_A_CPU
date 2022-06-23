@@ -18,8 +18,9 @@ use IEEE.NUMERIC_STD.ALL;
 -- any Xilinx leaf cells in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
-
-use assignmentCPU.cpu_defs_pack.all;
+library work;
+use work.cpu_defs_pack.all;
+use work.bit_vector_natural_pack.all;
 use std.textio.all;
 
 package cpu_trace_pack is
@@ -39,7 +40,7 @@ package cpu_trace_pack is
 
     procedure write_regs (variable l: inout line;
         constant Reg: in reg_type;
-        constant Z,CO,N,O : in Boolean);
+        constant Z,CO,N,O : in bit);
 
     function cmd_image( cmd : opcode_type )
         return string; 
@@ -51,30 +52,31 @@ end cpu_trace_pack;
     
 package body cpu_trace_pack is
     procedure print_header( variable f : out text ) is
+        variable l:line;
         begin
             write( l , "PC", left, 3);
-            write( l , string‘(" | ") );
+            write( l , string'(" | ") );
             write( l , "Cmd", left, 4);
-            write( l , string‘(" | ") );
+            write( l , string'(" | ") );
             write( l , "XYZ", left, 3);
-            write( l , string‘(" | ") );
+            write( l , string'(" | ") );
             write( l , "P", left, 3);
-            write( l , string‘(" | ") );
+            write( l , string'(" | ") );
             write( l , "R0", left, 3);
-            write( l , string‘(" | ") );
+            write( l , string'(" | ") );
             write( l , "R1", left, 3);
-            write( l , string‘(" | ") );
+            write( l , string'(" | ") );
             write( l , "R2", left, 3);
-            write( l , string‘(" | ") );
+            write( l , string'(" | ") );
             write( l , "R3", left, 3);
-            write( l , string‘(" | ") );
+            write( l , string'(" | ") );
             write( l , "ZCNO", left, 4);
     end print_header;
 
     procedure print_tail( variable f : out text )is
         variable l:line;
         begin
-            write( l , string‘("-----------------------------------"));
+            write( l , string'("-----------------------------------"));
             writeline( f , l );
     end print_tail;
 
@@ -84,56 +86,56 @@ package body cpu_trace_pack is
         constant X,Y,Z: in reg_addr_type) is
         begin
             write( l , hex_image (PC), left, 3);
-            write( l , string‘(" | ") );
+            write( l , string'(" | ") );
             write( l , cmd_image (OP), left, 4);
-            write( l , string‘(" | ") );
+            write( l , string'(" | ") );
             write( l , X, left, 1);
             write( l , Y, left, 1);
             write( l , Z, left, 1);
-            write( l , string‘(" | ") );
+            write( l , string'(" | ") );
     end write_PC_CMD;
 
     procedure write_param (variable l: inout line;
         constant P : in data_type) is
         begin
             write( l, P, left, 3);
-            write( l , string‘(" | ") );
+            write( l , string'(" | ") );
     end write_param;
 
     procedure write_no_param (variable l: inout line) is
         begin
             write( l , "---", left, 3);
-            write( l , string‘(" | ") );
+            write( l , string'(" | ") );
     end write_no_param;
 
     procedure write_regs (variable l: inout line;
         constant Reg: in reg_type;
-        constant Z,CO,N,O : in Boolean) is
+        constant Z,CO,N,O : in bit) is
         begin
             write( l , Reg(0), left, 3);
-            write( l , string‘(" | ") );
+            write( l , string'(" | ") );
             write( l , Reg(1), left, 3);
-            write( l , string‘(" | ") );
+            write( l , string'(" | ") );
             write( l , Reg(2), left, 3);
-            write( l , string‘(" | ") );
+            write( l , string'(" | ") );
             write( l , Reg(3), left, 3);
-            write( l , string‘(" | ") );
-            if Z then
+            write( l , string'(" | ") );
+            if Z = '1' then
                 write( l , "T", left, 1);
             else
                 write( l , "F", left, 1);
             end if;
-            if CO then
+            if CO = '1' then
                 write( l , "T", left, 1);
             else
                 write( l , "F", left, 1);
             end if;
-            if N then
+            if N = '1' then
                 write( l , "T", left, 1);
             else
                 write( l , "F", left, 1);
             end if;
-            if O then
+            if O = '1' then
                 write( l , "T", left, 1);
             else
                 write( l , "F", left, 1);
@@ -142,13 +144,12 @@ package body cpu_trace_pack is
 
     function hex_image( d : data_type )
         return string is
-        constant hex_table : string(1 to 16):=
-        “0123456789ABCDEF“;
+        constant hex_table : string(1 to 16):="0123456789ABCDEF";
         variable result : string( 1 to 3 );
     begin
-        result(3):=hex_table(d mod 16 + 1);
-        result(2):=hex_table((d / 16) mod 16 + 1);
-        result(1):=hex_table(d / 256 + 1);
+        result(3):=hex_table(bit_vector2natural(d) mod 16 + 1);
+        result(2):=hex_table((bit_vector2natural(d) / 16) mod 16 + 1);
+        result(1):=hex_table(bit_vector2natural(d) / 256 + 1);
         return result;
     end hex_image;
 
@@ -178,11 +179,15 @@ package body cpu_trace_pack is
             when code_and => return mnemonic_and;
             when code_add => return mnemonic_add;
             when code_addc => return mnemonic_addc;
+            -- Load and store with PC --
+            when code_ldpc => return mnemonic_ldpc;
+            when code_stpc => return mnemonic_stpc;
+            
             when others =>
                 assert FALSE
-                report “Illegal command in cmd_image“
+                report "Illegal command in cmd_image"
                 severity warning;
-                return ““;
+                return "";
         end case;
     end cmd_image;
 end cpu_trace_pack;

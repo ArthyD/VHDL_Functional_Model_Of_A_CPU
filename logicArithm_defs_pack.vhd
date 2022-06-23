@@ -19,27 +19,24 @@ use IEEE.NUMERIC_STD.ALL;
 -- any Xilinx leaf cells in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
-
-use assignmentCPU.bit_vector_natural_pack.all;
-use assignmentCPU.cpu_defs_pack.all;
+library work;
+use work.bit_vector_natural_pack.all;
+use work.cpu_defs_pack.all;
 
 package logicArithm_defs_pack is
 
-    procedure INC (
-        constant PC : in addr_type;
-        variable R : out addr_type;
-    );
+    function INC( A : in addr_type ) return addr_type;
 
     procedure EXEC_ADDC (
         constant A,B : in data_type;
-        constant CI : in Boolean;
+        constant CI : in bit;
         variable R : out data_type;
-        variable Z,CO,N,O : out Boolean );
+        variable Z,CO,N,O : out bit);
 
-    function “NOT“ (constant A :data_type)
+    function "NOT" (constant A :data_type)
         return data_type;
 
-    function “AND“ (constant A, B :data_type)
+    function "AND" (constant A, B :data_type)
         return data_type;
     
 
@@ -50,67 +47,54 @@ end logicArithm_defs_pack;
 
 package body logicArithm_defs_pack is
 
-    procedure INC (
-        constant PC : in addr_type;
-        variable R : out addr_type;);
+    function INC( A : in addr_type ) return addr_type is
+        variable C : bit := '1';
+        variable R : addr_type;
         begin
-            R := (PC+1) mod 2**addr_width;
-    end INC;
+            for i in A'reverse_range loop
+                R(i) := A(i) xor C;
+                C := A(i) and C;
+            end loop;
+            return R;
+     end INC;
 
-    procedure EXEC_ADDC (
+     procedure EXEC_ADDC (
         constant A,B : in data_type;
-        constant CI : in Boolean;
+        constant CI : in bit;
         variable R : out data_type;
-        variable Z,CO,N,O : out Boolean ) is
-        variable T: integer := A+B+Boolean‘Pos( CI );
-        variable A_s, B_s, T_s : integer; -- signed interpretation
+        variable Z,CO,N,O : out bit ) is
+        variable C_TMP : bit := CI;
+        variable N_TMP : bit;
+        variable R_TMP : data_type;
+        variable T : integer range 0 to 3;
+        constant zero_v: data_type := (others => '0');
         begin
-        if A >= 2**(data_width-1) then
-        A_s := A – 2**(data_width);
-        else
-        A_s := A;
-        end if;
-        if B >= 2**(data_width-1) then
-        B_s := B – 2**(data_width);
-        else
-        B_s := B;
-        end if;
-        T_s := A_s+B_s+Boolean‘Pos( CI );
-        if T >= 2**data_width then
-            R := T - 2**data_width;
-            CO := TRUE;
-        else
-            R := T;
-            CO := FALSE;
-        end if;
-        if T mod 2**data_width = 0 then
-            Z := TRUE;
-        else
-            Z := FALSE;
-        end if;
-        if T_s < 0 then
-            N := TRUE;
-        else
-            N := FALSE;
-        end if;
-        if (T_s < -2**(data_width-1)) or (T_s >= 2**(data_width-1)) then
-            O := TRUE;
-        else
-            O := FALSE;
-        end if;
+            for i in A'reverse_range loop
+                T := bit'pos(A(i))+ bit'pos(B(i))+ bit'pos(C_TMP);
+                R_TMP(i) := bit'val(T mod 2);
+                C_TMP := bit'val(T / 2);
+            end loop;
+            CO := C_TMP;
+            T := bit'pos(A(A'length-1))+ bit'pos(B(B'length-1))+
+            bit'pos(C_TMP);
+            N_TMP := bit'val(T mod 2);
+            O := R_TMP( data_width-1 ) XOR N_TMP;
+            N := N_TMP;
+            R := R_TMP;
+            Z := bit'val(boolean'pos(R_TMP = zero_v));
     end EXEC_ADDC;
 
-    function “NOT“ (constant A : data_type)
+    function "NOT" (constant A : data_type)
         return data_type is
     begin
-        return assignmentCPU.bit_vector_natural_pack.bit_vector2natural(NOT assignmentCPU.bit_vector_natural_pack.natural2bit_vector( A , data_width ) );
-    end “NOT“;
+        return NOT A ;
+    end "NOT";
 
-    function “AND“ (constant A,B : data_type)
+    function "AND" (constant A,B : data_type)
         return data_type is
     begin
-        return bit_vector2natural(natural2bit_vector( A , data_width ) AND natural2bit_vector( B , data_width ) );
-    end “AND“;
+        return  A  AND B;
+    end "AND";
 
     function "XOR" (constant A,B : data_type)
         return data_type is
