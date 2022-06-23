@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------------
 -- TUM VHDL Assignment
 -- Arthur Docquois, Maelys Chevrier, Timothée Carel, Roman Canals
--- 
+--
 -- Create Date: 06/06/2022
 -- Project Name: CPU Functional model
 
@@ -22,7 +22,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 
 package cpu_defs_pack is
-    
+
     -- DEFINITION OF TYPES --
     constant bus_width : natural := 12;
     constant data_width : natural := bus_width;
@@ -33,13 +33,13 @@ package cpu_defs_pack is
 
     subtype data_type is
         bit_vector(data_width-1 downto 0);
-    
+
     subtype addr_type is
         bit_vector(addr_width-1 downto 0);
-    
+
     subtype reg_addr_type is
         bit_vector(reg_addr_width-1 downto 0);
-    
+
     subtype opcode_type is
         bit_vector(opcode_width-1 downto 0);
 
@@ -65,6 +65,7 @@ package cpu_defs_pack is
     constant code_jnz : opcode_type := "110101";
     constant code_jnn : opcode_type := "110111";
     constant code_jno : opcode_type := "111000";
+    constant code_jnc : opcode_type := "110110";
     -- Logic and arithmetic instruction --
     constant code_not : opcode_type := "000110";
     constant code_and : opcode_type := "000111";
@@ -77,8 +78,8 @@ package cpu_defs_pack is
     constant code_srl : opcode_type := "001110";
     constant code_sll : opcode_type := "001101";
     constant code_sra : opcode_type := "001111";
-    constant code_slt : opcode_type := "010011"
-    constant code_sltu : opcode_type := "010010"
+    constant code_slt : opcode_type := "010011";
+    constant code_sltu : opcode_type := "010010";
     -- load and store PC instructions --
     constant code_ldpc : opcode_type := "100111";
     constant code_stpc : opcode_type := "101000";
@@ -105,6 +106,7 @@ package cpu_defs_pack is
     constant mnemonic_jnz : string( 1 to 3 ) := "jnz";
     constant mnemonic_jno : string( 1 to 3 ) := "jno";
     constant mnemonic_jnn : string( 1 to 3 ) := "jnn";
+    constant mnemonic_jnc : string( 1 to 3 ) := "jnc";
     -- Logic and arithmetic instruction --
     constant mnemonic_not : string( 1 to 3 ) := "not";
     constant mnemonic_and : string( 1 to 3 ) := "and";
@@ -125,7 +127,7 @@ package cpu_defs_pack is
     -- In and Out instructions --
     constant mnemonic_in: string( 1 to 2 ) := "in";
     constant mnemonic_out: string( 1 to 3 ) := "out";
-    
+
     -- FUNCTIONS AND PROCEDURES --
     function get (
         constant Memory : in mem_type;
@@ -134,7 +136,7 @@ package cpu_defs_pack is
     procedure set (
         variable Memory : inout mem_type;
         constant addr : in addr_type;
-        constant data : in data_type ); 
+        constant data : in data_type );
 
 end cpu_defs_pack;
 

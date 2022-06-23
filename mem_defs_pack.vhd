@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------------
 -- TUM VHDL Assignment
 -- Arthur Docquois, Maelys Chevrier, Timothée Carel, Roman Canals
--- 
+--
 -- Create Date: 06/06/2022
 -- Project Name: CPU Functional model
 -- I hate my life
@@ -27,7 +27,7 @@ use work.cpu_defs_pack.all;
 use work.bit_vector_natural_pack.all;
 use std.textio.all;
 
-package mem_defs_pack is 
+package mem_defs_pack is
     function init_memory(filename:string) return mem_type;
     function dump_memory(memory:mem_type;filename:string) return mem_type;
 end mem_defs_pack;
@@ -58,21 +58,22 @@ package body mem_defs_pack is
             end loop;
             return mem;
         end init_memory;
-        
+
     function dump_memory(memory: mem_type;filename:string) return mem_type is
-        begin
+
             -- Open file, do definitions
             file f : text open WRITE_MODE is filename;
             variable l : line;
-            
+
+            begin
             --read mem and write to file Dump.mem
-            
-            for tmp_addr in mem'low to mem'high loop
-		        l := to_string(memory(tmp_addr));
+
+            for tmp_addr in memory'low to memory'high loop
+		        write(l,memory(tmp_addr));
 		        writeline( f , l );
 	        end loop;
-                
-            -- 
-        
+
+            --
+
     end dump_memory;
 end mem_defs_pack;

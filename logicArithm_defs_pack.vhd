@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------------
 -- TUM VHDL Assignment
 -- Arthur Docquois, Maelys Chevrier, Timothée Carel, Roman Canals
--- 
+--
 -- Create Date: 06/06/2022
 -- Project Name: CPU Functional model
 
@@ -53,17 +53,17 @@ package logicArithm_defs_pack is
 
     function "AND" (constant A, B :data_type)
         return data_type;
-    
+
     function "OR" (constant A, B :data_type)
         return data_type;
 
     function "XOR" (constant A, B :data_type)
         return data_type;
 
-    function "SLT" (constant A, B :data_type)
+    function SLT (constant A, B :data_type)
         return data_type;
 
-    function "SLTU" (constant A, B :data_type)
+    function SLTU (constant A, B :data_type)
         return data_type;
 
 
@@ -140,19 +140,19 @@ package body logicArithm_defs_pack is
     function "SLL" (constant A : data_type)
         return data_type is
     begin
-        return  A(10 down to 0)& '0' ;
+        return  A(10 downto 0)& '0' ;
     end "SLL";
 
     function "SRL" (constant A : data_type)
         return data_type is
     begin
-        return '0' & A(11 down to 1) ;
+        return '0' & A(11 downto 1) ;
     end "SRL";
 
     function "SRA" (constant A : data_type)
         return data_type is
     begin
-        return A(11 down to 11)&'0' & A(10 down to 1) ;
+        return A(11)&'0' & A(10 downto 1) ;
     end "SRA";
 
     function "NOT" (constant A : data_type)
@@ -171,24 +171,32 @@ package body logicArithm_defs_pack is
         return data_type is
     begin
         return A XOR B;
-    end "XOR"
+    end "XOR";
 
     function "OR" (constant A,B : data_type)
         return data_type is
     begin
         return A OR B;
-    end "OR"
+    end "OR";
 
-    function "SLT" (constant A, B :data_type)
+    function SLT (constant A, B :data_type)
         return data_type is
     begin
-        return A < B;
-    end "SLT"
+        if(A < B) then
+            return "000000000001";
+        else
+            return "000000000000";
+        end if;
+    end SLT;
 
-    function "SLTU" (constant A, B :data_type)
+    function SLTU (constant A, B :data_type)
         return data_type is
     begin
-        return A < unsigned(B);
-    end "SLTU"
+        if(bit_vector2natural(A) < unsigned(B)) then
+            return "000000000001";
+        else
+            return "000000000000";
+        end if;
+    end SLTU;
 
 end logicArithm_defs_pack;
